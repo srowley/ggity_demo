@@ -4,21 +4,22 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Roboto+Slab&display=swap" rel="stylesheet">
     <%= csrf_meta_tag() %>
     <%= live_title_tag assigns[:page_title] || "GGityDemo" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body>
-    <header class="max-w-xl m-auto mb-8 bg-indigo-900 text-2xl md:text-5xl text-center text-white font-bold">
-      <h1 class="mb-4">GGity - The Demo</h1>
-      <nav class="font-normal text-sm">
-        <ul class="grid grid-cols-5">
+  <body class="m-0 w-full md:w-3/5 md:m-auto">
+    <header class="m-auto w-full bg-indigo-900 text-2xl md:text-5xl text-center text-white font-bold">
+      <h1 class="m-auto">GGity - The Demo</h1>
+      <nav class="font-normal text-sm md:text-base">
+        <ul class="pb-1 md:pb-2 grid grid-cols-5">
           <li>Home</li>
           <li>Scatter Plot</li>
           <li>Line Chart</li>
-          <li>Bar Chart</li>
-          <li>Ribbon Chart</li>
+          <li><%= link("Bar Chart", to: "/bar") %></li>
+          <li>Area Chart</li>
         <ul>
       </nav>
     </header>

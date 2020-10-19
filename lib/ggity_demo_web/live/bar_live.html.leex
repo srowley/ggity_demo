@@ -1,0 +1,167 @@
+<div x-data="{
+  openTab: 1,
+  activeClasses: 'border-l border-t border-r rounded-t text-indigo-800',
+  inactiveClasses: 'text-indigo-500 hover:text-indigo-800'
+  }"
+  id="inputs" style="width:400px" class="mr-4">
+  <div class="w-full pr-6 pl-6 pb-6 mt-6">
+    <ul class="flex justify-between border-b text-indigo-800 text-sm md:text-base">
+      <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }" class="mr-1">
+        <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Mapping</a>
+      </li>
+      <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="mr-1">
+        <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Fixed Aesthetics</a>
+      </li>
+      <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1">
+        <a :class="openTab === 3 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Theme</a>
+      </li>
+    </ul>
+  </div>
+
+  <section x-show="openTab === 1" id="mapping_tab" class="w-full text-sm mb-4 ml-4 mr-4 border border-indigo-800">
+    <%= f = form_for :mapping, "#", [phx_change: "update_mapping", class: "p-2 bg-gray-100 grid grid-rows-2 grid-cols-2 gap-x-2 gap-y-2"] %>
+      <p class="font-bold text-center">Aesthetic</p>
+      <p class="font-bold text-center">Variable</p>
+      <label class="pl-2" for="x">X Coordinate Position</label>
+      <%= select(f, :x, variables_options(), class: "border", selected: @mapping[:x]) %>
+      <label class="pl-2" for="fill">Fill Color</label>
+      <%= select(f, :fill, [{:none, "none"} | variables_options()], class: "border", selected: @mapping[:fill]) %>
+      <label class="pl-2" for="fill_scale_option">Fill Color Palette</label>
+      <ul>
+        <li>
+          <%= radio_button(f, :fill_scale_option, :viridis, checked: @scales[:fill_scale_option] == :viridis, class: "mr-1") %>
+          <%= label(f, :fill_scale_option_default, "default") %>
+        </li>
+        <li>
+          <%= radio_button(f, :fill_scale_option, :plasma, checked: @scales[:fill_scale_option] == :plasma, class: "mr-1") %>
+          <%= label(f, :fill_scale_option_plasma, "plasma") %>
+        </li>
+        <li>
+          <%= radio_button(f, :fill_scale_option, :inferno, checked: @scales[:fill_scale_option] == :inferno, class: "mr-1") %>
+          <%= label(f, :fill_scale_option_inferno, "inferno") %>
+        </li>
+        <li>
+          <%= radio_button(f, :fill_scale_option, :magma, checked: @scales[:fill_scale_option] == :magma, class: "mr-1") %>
+          <%= label(f, :fill_scale_option_magma, "magma") %>
+        </li>
+        <li>
+          <%= radio_button(f, :fill_scale_option, :cividis, checked: @scales[:fill_scale_option] == :cividis, class: "mr-1") %>
+          <%= label(f, :fill_scale_option, "cividis") %>
+      </ul>
+      <label class="pl-2" for="alpha">Alpha Level</label>
+      <%= select(f, :alpha, [{:none, "none"} | variables_options()], class: "border", selected: @mapping[:alpha]) %>
+    </form>
+  </section>
+
+  <section x-show="openTab === 2" id="fixed_tab" class="w-full text-sm mb-4 ml-4 mr-4 border border-indigo-800">
+    <%= f = form_for :fixed_aesthetics, "#", [phx_change: "update_fixed", class: "p-2 bg-gray-100 grid grid-rows-3 grid-cols-2 gap-x-2 gap-y-2"] %>
+      <p class="font-bold text-center">Aesthetic</p>
+      <p class="font-bold text-center">Fixed Value</p>
+      <label class="pl-2" for="fill">Fill Color</label>
+      <ul>
+        <li>
+          <%= radio_button(f, :fill, "default", checked: @fixed_aesthetics[:fill] == nil, class: "mr-1") %>
+          <%= label(f, :fill_default, "default") %>
+        </li>
+        <li>
+          <%= radio_button(f, :fill, "gray", checked: @fixed_aesthetics[:fill] == "gray", class: "mr-1") %>
+          <%= label(f, :fill_gray, "gray") %>
+        </li>
+        <li>
+          <%= radio_button(f, :fill, "darkblue", checked: @fixed_aesthetics[:fill] == "darkblue", class: "mr-1") %>
+          <%= label(f, :fill_darkblue, "darkblue") %>
+        </li>
+        <li>
+          <%= radio_button(f, :fill, "tomato", checked: @fixed_aesthetics[:fill] == "tomato", class: "mr-1") %>
+          <%= label(f, :fill_tomato, "tomato") %>
+      </ul>
+      <label class="pl-2" for="alpha">Alpha Level</label>
+      <%= range_input(f, :alpha, value: @fixed_aesthetics[:alpha], min: 0, max: 1, step: 0.05, class: "border") %>
+    </form>
+  </section>
+
+  <section x-show="openTab === 3" id="themes_tab" class="w-full text-sm mb-4 ml-4 mr-4 border border-indigo-800">
+    <%= f = form_for :theme, "#", [phx_change: "update_theme", class: "p-2 bg-gray-100 grid grid-rows-4 grid-cols-2 gap-x-2 gap-y-2"] %>
+      <p class="font-bold text-center">Plot Elements</p>
+      <p class="font-bold text-center">Styles</p>
+      <label class="pl-2" for="base_font_family">Base Font Family</label>
+      <%= select(f, :base_font_family, font_options(), class: "border", selected: @theme[:text][:family]) %>
+      <label class="pl-2" for="panel_background_fill">Panel Background Color</label>
+      <div>
+        <%= radio_button(f, :panel_background_fill, "#EEEEEE", checked: @theme[:panel_background][:fill] == "#EEEEEE", class: "mr-1") %>
+        <%= label(f, :panel_background_fill__EEEEEE, "default", class: "mr-3") %>
+        <%= radio_button(f, :panel_background_fill, "white", checked: @theme[:panel_background][:fill] == "white", class: "mr-1") %>
+        <%= label(f, :panel_background_fill_white, "white") %>
+      </div>
+      <label class="pl-2" for="panel_grid_color">Panel Grid Color</label>
+      <div>
+        <%= radio_button(f, :panel_grid_color, "#FFFFFF", checked: @theme[:panel_grid][:color] == "#FFFFFF", class: "mr-1") %>
+        <%= label(f, :panel_grid_color__FFFFFF, "default", class: "mr-3") %>
+        <%= radio_button(f, :panel_grid_color, "lightgray", checked: @theme[:panel_grid][:color] == "lightgray", class: "mr-1") %>
+        <%= label(f, :panel_grid_color_white, "light gray") %>
+      </div>
+      <label class="pl-2" for="panel_grid_major_size">Panel Major Gridline Size</label>
+      <div>
+        <%= radio_button(f, :panel_grid_major_size, 1, checked: @theme[:panel_grid_major][:size] == 1, class: "mr-1") %>
+        <%= label(f, :panel_grid_major_size_1, "default", class: "mr-3") %>
+        <%= radio_button(f, :panel_grid_major_size, 0.5, checked: @theme[:panel_grid_major][:size] == 0.5, class: "mr-1") %>
+        <%= label(f, :panel_grid_major_size_0_5, "0.5") %>
+      </div>
+      <label class="pl-2" for="axis_line_color">Axis Line Color</label>
+      <div>
+        <%= radio_button(f, :axis_line_color, nil, checked: @theme[:axis_line][:color] == nil, class: "mr-1") %>
+        <%= label(f, :axis_line_color_, "default", class: "mr-3") %>
+        <%= radio_button(f, :axis_line_color, "gray", checked: @theme[:axis_line][:color] == "gray", class: "mr-1") %>
+        <%= label(f, :axis_line_color_gray, "gray") %>
+      </div>
+      <label class="pl-2" for="axis_ticks_length">Axis Tick Marks?</label>
+      <div>
+        <%= checkbox(f, :axis_ticks_length, checked_value: 2, unchecked_value: 0, value: @theme[:axis_ticks_length]) %>
+      </div>
+      <label class="pl-2" for="angle">X-Axis Tick Lable Angle</label>
+      <%= range_input(f, :angle, value: @theme[:axis_text_x][:angle], min: 0, max: 90, step: 5, class: "border") %>
+    </form>
+  </section>
+
+  <aside x-data="{ about_data_show: true}" class="ml-4 text-sm md:text-base">
+    <div class="flex justify-between items-center rounded bg-indigo-800 text-white text-bold p-2">
+      <h2 class="text-base md:text-lg font-semibold">About The Data</h2>
+      <a x-show="about_data_show" @click="about_data_show = !about_data_show" class="text-sm" href="#">[hide]</a>
+      <a x-show="!about_data_show" @click="about_data_show = !about_data_show"  class="text-sm" href="#">[show]</a>
+    </div>
+    <div x-show="about_data_show">
+      <p>The mpg dataset is one of the canonical datasets included with R's ggplot2 package (and with GGity),
+      describing city/highway mileage data for 235 makes and models of vehicles. The mileage data is not used here,
+      as bar charts are typically used to summarize counts of discrete variables. Unlike other geoms,
+      the bar geom does not map a variable from the data to a coordinate on the y-axis; instead by default the y-aesthetic
+      is mapped to the count of observations. GGity does support the "col" geom, which directly maps a value to y.
+      </p>
+      <br/>
+      <p>Variables available here include:
+        <ul class="pl-10 list-disc">
+          <li>manufacturer</li>
+          <li>vehicle class ("class")</li>
+          <li>drive train ("drv")</li>
+          <li>fuel type ("fl")</li>
+          <li>transmission type ("trans")</li>
+        </ul>
+      <br/>
+      <p>Note that while <code class="p-1" style="background-color:#2f1e2e; color:#fec418">geom_bar/3</code> allows for
+      mapping a variable to the alpha aesthetic, doing so is rarely advisable. In this case however, mapping alpha to
+      a variable (and setting fill to a fixed value), generates a sort of sequential color scale that might
+      be more visually appealing than the built-in color palettes.
+      </p>
+    </div>
+  </aside>
+</div>
+
+<div id="output" class="mt-2 ml-4 mr-4 md:mt-6" style="width:550px">
+  <section id="chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border border-gray-500">
+    <%= {:safe, draw_chart(@mapping, @fixed_aesthetics, @scales, @theme)} %>
+  </section>
+
+  <section id="code" style="background-color:#2f1e2e" class="w-full p-5 border text-xs">
+    <style><%= {:safe, Makeup.stylesheet(Makeup.Styles.HTML.StyleMap.paraiso_dark_style())} %></style>
+    <%= {:safe, generated_code(@mapping, @fixed_aesthetics, @scales, @theme)} %>
+  </section>
+</div>

@@ -41,7 +41,11 @@ defmodule GGityDemo.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+      # {:ggity, git: "https://github.com/srowley/ggity.git"},
+      {:ggity, path: "~/repos/ggity"},
+      {:nimble_csv, "~> 0.7"},
+      {:makeup_elixir, "~> 0.15"}
     ]
   end
 

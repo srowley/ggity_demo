@@ -1,24 +1,25 @@
 <div x-data="{
   openTab: 1,
-  activeClasses: 'border-l border-t border-r rounded-t text-indigo-800',
-  inactiveClasses: 'text-indigo-500 hover:text-indigo-800'
+  activeClasses: 'border-l border-t border-r border-indigo-800 bg-gray-100 rounded-t',
+  inactiveClasses: 'text-indigo-500 hover:text-indigo-800',
+  about_data_show: true
   }"
-  id="inputs" style="width:400px" class="mr-4">
-  <div class="w-full pr-6 pl-6 pb-6 mt-6">
-    <ul class="flex justify-between border-b text-indigo-800 text-sm md:text-base">
-      <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }" class="mr-1">
+  id="inputs" style="width:400px" class="-ml-2 mr-6">
+  <div class="w-full ml-4 mt-6">
+    <ul class="-mr-4 w-full flex justify-between border-b border-indigo-800 text-indigo-800 text-sm md:text-base">
+      <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }">
         <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Mapping</a>
       </li>
-      <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }" class="mr-1">
+      <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }">
         <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Fixed Aesthetics</a>
       </li>
-      <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }" class="mr-1">
+      <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }">
         <a :class="openTab === 3 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Theme</a>
       </li>
     </ul>
   </div>
 
-  <section x-show="openTab === 1" id="mapping_tab" class="w-full text-sm mb-4 ml-4 mr-4 border border-indigo-800">
+  <section x-show="openTab === 1" id="mapping_tab" class="w-full text-sm mb-4 ml-4 mr-4 border-r border-l border-b border-indigo-800">
     <%= f = form_for :mapping, "#", [phx_change: "update_mapping", class: "p-2 bg-gray-100 grid grid-rows-2 grid-cols-2 gap-x-2 gap-y-2"] %>
       <p class="font-bold text-center">Aesthetic</p>
       <p class="font-bold text-center">Variable</p>
@@ -53,7 +54,7 @@
     </form>
   </section>
 
-  <section x-show="openTab === 2" id="fixed_tab" class="w-full text-sm mb-4 ml-4 mr-4 border border-indigo-800">
+  <section x-show="openTab === 2" id="fixed_tab" class="w-full text-sm mb-4 ml-4 mr-4 border-l border-r border-b border-indigo-800">
     <%= f = form_for :fixed_aesthetics, "#", [phx_change: "update_fixed", class: "p-2 bg-gray-100 grid grid-rows-1 grid-cols-2 gap-x-2 gap-y-2"] %>
       <p class="font-bold text-center">Aesthetic</p>
       <p class="font-bold text-center">Fixed Value</p>
@@ -80,7 +81,7 @@
     </form>
   </section>
 
-  <section x-show="openTab === 3" id="themes_tab" class="w-full text-sm mb-4 ml-4 mr-4 border border-indigo-800">
+  <section x-show="openTab === 3" id="themes_tab" class="w-full text-sm mb-4 ml-4 mr-4 border-l border-r border-b border-indigo-800">
     <%= f = form_for :theme, "#", [phx_change: "update_theme", class: "p-2 bg-gray-100 grid grid-rows-4 grid-cols-2 gap-x-2 gap-y-2"] %>
       <p class="font-bold text-center">Plot Elements</p>
       <p class="font-bold text-center">Styles</p>
@@ -123,18 +124,18 @@
     </form>
   </section>
 
-  <aside x-data="{ about_data_show: true}" class="ml-4 text-sm md:text-base">
+  <aside class="w-full ml-4 text-sm md:text-base">
     <div class="flex justify-between items-center rounded bg-indigo-800 text-white text-bold p-2">
       <h2 class="text-base md:text-lg font-semibold">About The Data</h2>
-      <a x-show="about_data_show" @click="about_data_show = !about_data_show" class="text-sm" href="#">[hide]</a>
-      <a x-show="!about_data_show" @click="about_data_show = !about_data_show"  class="text-sm" href="#">[show]</a>
+      <a x-show="about_data_show" @click="about_data_show = !about_data_show" class="text-sm hover:underline" href="#">[hide]</a>
+      <a x-show="!about_data_show" @click="about_data_show = !about_data_show"  class="text-sm hover:underline" href="#">[show]</a>
     </div>
     <div x-show="about_data_show">
       <p>The mpg dataset is one of the canonical datasets included with R's ggplot2 package (and with GGity),
       describing city/highway mileage data for 235 makes and models of vehicles. The mileage data is not used here,
       as bar charts are typically used to summarize counts of discrete variables. Unlike other geoms,
-      the bar geom does not map a variable from the data to a coordinate on the y-axis; instead by default the y-aesthetic
-      is mapped to the count of observations. GGity does support the "col" geom, which directly maps a value to y.
+      the bar geom does not directly map a variable value to the y-axis; instead by default the y-aesthetic
+      is mapped to the count of observations. GGity does support the "col" geom, which maps a continuous variable to y.
       </p>
       <br/>
       <p>Variables available here include:
@@ -145,9 +146,10 @@
           <li>fuel type ("fl")</li>
           <li>transmission type ("trans")</li>
         </ul>
+      </p>
       <br/>
-      <p>Note that while <code class="p-1" style="background-color:#2f1e2e; color:#fec418">geom_bar/3</code> allows for
-      mapping a variable to the alpha aesthetic, doing so is rarely advisable. In this case however, mapping alpha to
+      <p>Note that while <code class="p-1" style="background-color:#2f1e2e; color:#fec418">Plot.geom_bar/3</code> allows
+      a variable to mapped to the alpha aesthetic, doing so is rarely advisable. In this case however, mapping alpha to
       a variable (and setting fill to a fixed value), generates a sort of sequential color scale that might
       be more visually appealing than the built-in color palettes.
       </p>

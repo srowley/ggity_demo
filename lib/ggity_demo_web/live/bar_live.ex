@@ -4,6 +4,8 @@ defmodule GGityDemoWeb.BarLive do
   alias GGity.Plot
   import GGity.Element.{Line, Rect, Text}
 
+  @mpg_data GGity.Examples.mpg()
+
   @default_theme [
     text: [family: "Helvetica, Arial, sans-serif"],
     axis_text_x: [angle: 0],
@@ -107,7 +109,7 @@ defmodule GGityDemoWeb.BarLive do
   end
 
   defp draw_chart(mapping, fixed_aesthetics, scales, theme) do
-    GGity.Examples.mpg()
+    @mpg_data
     |> Enum.filter(fn record ->
       record["manufacturer"] in [
         "chevrolet",

@@ -23,7 +23,7 @@ config :ggity_demo, GGityDemoWeb.Endpoint,
 # If you are doing OTP releases, you need to instruct Phoenix
 # to start each relevant endpoint:
 #
-#     config :ggity_demo, GGityDemoWeb.Endpoint, server: true
+    # config :ggity_demo, GGityDemoWeb.Endpoint, server: true
 #
 # Then you can assemble a release by calling `mix release`.
 # See `mix help release` for more information.

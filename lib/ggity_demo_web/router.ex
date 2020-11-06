@@ -17,7 +17,8 @@ defmodule GGityDemoWeb.Router do
   scope "/", GGityDemoWeb do
     pipe_through :browser
 
-    live "/", BarLive
+    live "/", ScatterLive
+    live "/scatter", ScatterLive
     live "/bar", BarLive
   end
 

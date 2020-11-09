@@ -53,8 +53,6 @@
       </ul>
       <label class="pl-2" for="shape">Point Shape</label>
       <%= select(f, :shape, [{:none, "none"} | discrete_variable_options()], class: "border", selected: @mapping[:shape]) %>
-      <label class="pl-2" for="size">Point Size</label>
-      <%= select(f, :size, [{:none, "none"} | discrete_variable_options()], class: "border", selected: @mapping[:size]) %>
     </form>
   </section>
 
@@ -146,7 +144,7 @@
     <div x-show="about_data_show">
       <p>One of the canonical ggplot2 example datasets, 'mtcars' includes fuel consumption and
       other data describing design and performance for 32 automobiles (1973-74 models) from 1974
-      Motor Trend US magazines.
+      Motor Trend U.S. magazines.
       </p>
       <br/>
       <p>Variables available include:

@@ -23,8 +23,8 @@ defmodule GGityDemoWeb.ScatterLive do
     {:ok,
      assign(
        socket,
-       mapping: %{x: "wt", y: "mpg"},
-       scales: [color_scale_option: :viridis],
+       mapping: %{x: "qsec", y: "mpg", color: "gear"},
+       scales: [color_scale_option: :cividis],
        fixed_aesthetics: [alpha: 1],
        theme: @default_theme
      )}
@@ -90,9 +90,6 @@ defmodule GGityDemoWeb.ScatterLive do
     [:wt, :mpg, :qsec, :disp]
   end
 
-  defp all_variable_options do
-    discrete_variable_options() ++ continuous_variable_options()
-  end
   defp font_options do
     [
       Default: "Helvetica, Arial, sans-serif",
@@ -110,7 +107,7 @@ defmodule GGityDemoWeb.ScatterLive do
     |> Plot.geom_point(mapping, fixed_aesthetics)
     |> Plot.scale_color_viridis(option: scales[:color_scale_option])
     |> Plot.scale_size_discrete()
-    |> Plot.labs([{:title, "Cars"} | pretty_label_list(mapping)])
+    |> Plot.labs([{:title, "Motor Trend Statistics"} | pretty_label_list(mapping)])
     |> Plot.theme(
       text: element_text(family: theme[:text][:family]),
       axis_line: element_line(theme[:axis_line]),
@@ -134,7 +131,7 @@ defmodule GGityDemoWeb.ScatterLive do
     |> Plot.new(#{code_for_x_y(mapping)})
     |> Plot.geom_bar(#{code_for_geom(mapping, fixed_aesthetics)})
     #{code_for_color_scale(scales, mapping)}
-    #{code_for_labels(mapping)}
+    #{code_for_labels()}
     #{code_for_theme(theme)}
     |> Plot.plot()
     """
@@ -208,12 +205,9 @@ defmodule GGityDemoWeb.ScatterLive do
 
   defp code_for_color_scale(_scales, _mapping), do: ""
 
-  defp code_for_labels(mapping) do
+  defp code_for_labels() do
     """
-    |> Plot.labs(
-      title: "Cars",
-      #{pretty_labels(mapping)}
-      )
+    |> Plot.labs(title: "Motor Trend Statistics")
     """
     |> String.trim()
   end
@@ -224,7 +218,7 @@ defmodule GGityDemoWeb.ScatterLive do
 
   defp strip_list_brackets(not_a_list), do: not_a_list
 
-  def pretty_label(variable), do: humanize(variable)
+  def pretty_label(variable), do: variable
 
   defp pretty_label_list(mapping) do
     Enum.map(mapping, fn {aesthetic, variable} ->
@@ -232,13 +226,13 @@ defmodule GGityDemoWeb.ScatterLive do
     end)
   end
 
-  defp pretty_labels(mapping) do
-    mapping
-    |> Enum.reverse()
-    |> Enum.map_join(",\n  ", fn {key, value} ->
-      "#{Atom.to_string(key)}: \"#{pretty_label(value)}\""
-    end)
-  end
+  # defp pretty_labels(mapping) do
+  #   mapping
+  #   |> Enum.reverse()
+  #   |> Enum.map_join(",\n  ", fn {key, value} ->
+  #     "#{Atom.to_string(key)}: \"#{pretty_label(value)}\""
+  #   end)
+  # end
 
   defp code_for_theme(theme) do
     custom_theme_elements =

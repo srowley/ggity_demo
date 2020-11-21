@@ -5,7 +5,10 @@ defmodule GGityDemoWeb.ScatterLive do
   import GGity.Element.{Line, Rect, Text}
 
   @mtcars_data GGity.Examples.mtcars()
-               |> Enum.map(fn record -> Enum.map(record, fn {key, value} -> {to_string(key), value} end) |> Enum.into(%{}) end)
+               |> Enum.map(fn record ->
+                 Enum.map(record, fn {key, value} -> {to_string(key), value} end)
+                 |> Enum.into(%{})
+               end)
 
   @default_theme [
     text: [family: "Helvetica, Arial, sans-serif"],
@@ -129,7 +132,7 @@ defmodule GGityDemoWeb.ScatterLive do
 
     Examples.mtcars()
     |> Plot.new(#{code_for_x_y(mapping)})
-    |> Plot.geom_bar(#{code_for_geom(mapping, fixed_aesthetics)})
+    |> Plot.geom_point(#{code_for_geom(mapping, fixed_aesthetics)})
     #{code_for_color_scale(scales, mapping)}
     #{code_for_labels()}
     #{code_for_theme(theme)}

@@ -2,13 +2,14 @@
   openTab: 1,
   activeClasses: 'border-l border-t border-r border-indigo-800 bg-gray-100 rounded-t',
   inactiveClasses: 'text-indigo-500 hover:text-indigo-800',
-  about_data_show: true
+  about_data_show: true,
+  about_layers_show: true
   }"
   id="inputs" style="width:400px" class="-ml-2 mr-6">
   <div class="w-full ml-4 mt-6">
     <ul class="-mr-4 w-full flex justify-between border-b border-indigo-800 text-indigo-800 text-sm md:text-base">
       <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }">
-        <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Mapping</a>
+        <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Data/Mapping</a>
       </li>
       <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }">
         <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Fixed Aesthetics</a>
@@ -21,71 +22,51 @@
 
   <section x-show="openTab === 1" id="mapping_tab" class="w-full text-sm mb-4 ml-4 mr-4 border-r border-l border-b border-indigo-800">
     <%= f = form_for :mapping, "#", [phx_change: "update_mapping", class: "p-2 bg-gray-100 grid grid-rows-2 grid-cols-2 gap-x-2 gap-y-2"] %>
-      <p class="font-bold text-center">Aesthetic</p>
-      <p class="font-bold text-center">Variable</p>
-      <label class="pl-2" for="x">X Coordinate Position</label>
-      <%= select(f, :x, continuous_variable_options(), class: "border", selected: @mapping[:x]) %>
-      <label class="pl-2" for="y">Y Coordinate Position</label>
-      <%= select(f, :y, continuous_variable_options(), class: "border", selected: @mapping[:y]) %>
-      <label class="pl-2" for="color">Point Color</label>
-      <%= select(f, :color, [{:none, "none"} | discrete_variable_options()], class: "border", selected: @mapping[:color]) %>
-      <label class="pl-2" for="color_scale_option">Color Palette</label>
+      <label class="pl-2" for="metrics">Included Metrics</label>
       <ul>
         <li>
-          <%= radio_button(f, :color_scale_option, :viridis, checked: @scales[:color_scale_option] == :viridis, class: "mr-1") %>
-          <%= label(f, :color_scale_option_default, "default") %>
+          <%= checkbox(f, :metrics_unemploy, checked: "unemploy" in @metrics) %>
+          <%= label(f, :metrics_unemploy, "unemploy", class: "pl-2") %>
         </li>
         <li>
-          <%= radio_button(f, :color_scale_option, :plasma, checked: @scales[:color_scale_option] == :plasma, class: "mr-1") %>
-          <%= label(f, :color_scale_option_plasma, "plasma") %>
+          <%= checkbox(f, :metrics_pce, checked: "pce" in @metrics) %>
+          <%= label(f, :metrics_pce, "pce", class: "pl-2") %>
         </li>
         <li>
-          <%= radio_button(f, :color_scale_option, :inferno, checked: @scales[:color_scale_option] == :inferno, class: "mr-1") %>
-          <%= label(f, :color_scale_option_inferno, "inferno") %>
+          <%= checkbox(f, :metrics_pop, checked: "pop" in @metrics) %>
+          <%= label(f, :metrics_pop, "pop", class: "pl-2") %>
         </li>
-        <li>
-          <%= radio_button(f, :color_scale_option, :magma, checked: @scales[:color_scale_option] == :magma, class: "mr-1") %>
-          <%= label(f, :color_scale_option_magma, "magma") %>
-        </li>
-        <li>
-          <%= radio_button(f, :color_scale_option, :cividis, checked: @scales[:color_scale_option] == :cividis, class: "mr-1") %>
-          <%= label(f, :color_scale_option_civdiis, "cividis") %>
       </ul>
-      <label class="pl-2" for="shape">Point Shape</label>
-      <%= select(f, :shape, [{:none, "none"} | discrete_variable_options()], class: "border", selected: @mapping[:shape]) %>
+      <label class="pl-2" for="aesthetic">Metric Aesthetic</label>
+      <ul>
+        <li>
+          <%= radio_button(f, :aesthetic, "color", checked: :color in Map.keys(@mapping), class: "mr-1") %>
+          <%= label(f, :aesthetic_color, "color") %>
+        </li>
+        <li>
+          <%= radio_button(f, :aesthetic, "linetype", checked: :linetype in Map.keys(@mapping), class: "mr-1") %>
+          <%= label(f, :aesthetic_linetype, "linetype") %>
+        </li>
+      </ul>
     </form>
   </section>
 
   <section x-show="openTab === 2" id="fixed_tab" class="w-full text-sm mb-4 ml-4 mr-4 border-l border-r border-b border-indigo-800">
-    <%= f = form_for :fixed_aesthetics, "#", [phx_change: "update_fixed", class: "p-2 bg-gray-100 grid grid-rows-1 grid-cols-2 gap-x-2 gap-y-2"] %>
+    <%= f = form_for :fixed_aesthetics, "#", [phx_change: "update_fixed", class: "p-2 bg-gray-100 grid grid-rows-4 grid-cols-2 gap-x-2 gap-y-2"] %>
       <p class="font-bold text-center">Aesthetic</p>
       <p class="font-bold text-center">Fixed Value</p>
-      <label class="pl-2" for="color">Point Color</label>
-      <ul>
-        <li>
-          <%= radio_button(f, :color, "default", checked: @fixed_aesthetics[:color] == nil, class: "mr-1") %>
-          <%= label(f, :color_default, "default") %>
-        </li>
-        <li>
-          <%= radio_button(f, :color, "gray", checked: @fixed_aesthetics[:color] == "gray", class: "mr-1") %>
-          <%= label(f, :color_gray, "gray") %>
-        </li>
-        <li>
-          <%= radio_button(f, :color, "darkblue", checked: @fixed_aesthetics[:color] == "darkblue", class: "mr-1") %>
-          <%= label(f, :color_darkblue, "darkblue") %>
-        </li>
-        <li>
-          <%= radio_button(f, :color, "tomato", checked: @fixed_aesthetics[:color] == "tomato", class: "mr-1") %>
-          <%= label(f, :color_tomato, "tomato") %>
-      </ul>
-      <label class="pl-2" for="alpha">
-        Alpha Level (<output for="alpha"><%= @fixed_aesthetics[:alpha] %></output>)
+      <label class="pl-2" for="line_size">
+        Line Size (<output for="line_size"><%= @fixed_aesthetics.line_size %></output>)
       </label>
-      <%= range_input(f, :alpha, value: @fixed_aesthetics[:alpha], min: 0.05, max: 1, step: 0.05, class: "border") %>
-      <label class="pl-2" for="size">
-        Point Size (<output for="size"><%= @fixed_aesthetics[:size] || 4 %></output>)
+      <%= range_input(f, :line_size, value: @fixed_aesthetics.line_size, min: 1, max: 5, step: 1, class: "border") %>
+      <label class="pl-2" for="point_size">
+        Marker Size (<output for="point_size"><%= @fixed_aesthetics.point_size %></output>)
       </label>
-      <%= range_input(f, :size, value: @fixed_aesthetics[:size] || 4, min: 3, max: 8, step: 0.5, class: "border") %>
+      <%= range_input(f, :point_size, value: @fixed_aesthetics.point_size, min: 2, max: 10, step: 1, class: "border") %>
+      <label class="pl-2" for="label_font_size">
+        Label Font Size (<output for="label_font_size"><%= @fixed_aesthetics.label_font_size %></output>)
+      </label>
+      <%= range_input(f, :label_font_size, value: @fixed_aesthetics.label_font_size, min: 4, max: 10, step: 1, class: "border") %>
     </form>
   </section>
 
@@ -143,25 +124,45 @@
 
   <aside class="w-full ml-4 text-sm md:text-base">
     <div class="flex justify-between items-center rounded bg-indigo-800 text-white text-bold p-2">
+      <h2 class="text-base md:text-lg font-semibold">About Layers</h2>
+      <a x-show="about_layers_show" @click="about_layers_show = !about_layers_show" class="text-sm hover:underline" href="#">[hide]</a>
+      <a x-show="!about_layers_show" @click="about_layers_show = !about_layers_show"  class="text-sm hover:underline" href="#">[show]</a>
+    </div>
+    <div x-show="about_layers_show">
+      <p>
+      GGity plots are collections of layers, where each layer is composed of a dataset, a mapping,
+      a statistical transformation and a position adjustment. Layers are a powerful tool for customization
+      and fine-tuning of a particular visualization.
+      </p>
+      <br/>
+      <p>
+      The primary layer in this example maps a line to selected economic time series data. We can add points highlighting
+      the months with minimum and maximum unemployment duration by constructing two new datasets, and then adding new
+      layers that map points and text to the values (only one per dataset in this case).
+      </p>
+    </div>
+  </aside>
+
+  <aside class="w-full ml-4 mt-4 text-sm md:text-base">
+    <div class="flex justify-between items-center rounded bg-indigo-800 text-white text-bold p-2">
       <h2 class="text-base md:text-lg font-semibold">About The Data</h2>
       <a x-show="about_data_show" @click="about_data_show = !about_data_show" class="text-sm hover:underline" href="#">[hide]</a>
       <a x-show="!about_data_show" @click="about_data_show = !about_data_show"  class="text-sm hover:underline" href="#">[show]</a>
     </div>
     <div x-show="about_data_show">
-      <p>One of the canonical ggplot2 example datasets, 'mtcars' includes fuel consumption and
-      other data describing design and performance for 32 automobiles (1973-74 models) from 1974
-      Motor Trend U.S. magazines.
+      <p>The economics dataset was produced from US economic time series data available from the
+      <a href="http://research.stlouisfed.org/fred2">Federal Reserve Bank of St. Louis</a>. This example
+      uses the "long form" version of the data, which normalizes the values for each variable to a value
+      between zero and one.
       </p>
       <br/>
       <p>Variables available include:
         <ul class="pl-10 list-disc">
-          <li>wt (weight, thousands of pounds)</li>
-          <li>mpg (miles per gallon)</li>
-          <li>disp (displacement, cubic inches)</li>
-          <li>qsec (quarter-mile time)</li>
-          <li>cyl (number of cylinders)</li>
-          <li>am (transmission; 0 = automatic, 1 = manual)</li>
-          <li>gear (number of forward gears)</li>
+          <li>date (month of data collection)</li>
+          <li>uempmed (median duration of unemployment)</li>
+          <li>unemploy (number of unemployed)</li>
+          <li>pce (personal consumption expenditures)</li>
+          <li>pop (total population)</li>
         </ul>
       </p>
     </div>
@@ -170,11 +171,11 @@
 
 <div id="output" class="mt-2 ml-4 mr-4 md:mt-6" style="width:550px">
   <section id="chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border border-gray-500">
-    <%= {:safe, draw_chart(@mapping, @fixed_aesthetics, @scales, @theme)} %>
+    <%= {:safe, draw_chart(@mapping, @metrics, @fixed_aesthetics, @theme)} %>
   </section>
 
   <section id="code" style="background-color:#2f1e2e" class="w-full p-5 border text-xs">
     <style><%= {:safe, Makeup.stylesheet(Makeup.Styles.HTML.StyleMap.paraiso_dark_style())} %></style>
-    <%= {:safe, generated_code(@mapping, @fixed_aesthetics, @scales, @theme)} %>
+    <%= {:safe, generated_code(@mapping, @metrics, @fixed_aesthetics, @theme)} %>
   </section>
 </div>

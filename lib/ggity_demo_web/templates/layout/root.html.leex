@@ -12,14 +12,13 @@
   </head>
   <body class="m-0 w-full md:w-4/5 md:m-auto">
     <header class="m-auto w-full bg-indigo-900 text-2xl md:text-5xl text-center text-white font-bold">
-      <h1 class="m-auto">GGity - The Demo</h1>
+      <h1 class="m-auto">GGity By Example</h1>
       <nav class="font-normal text-sm md:text-base">
-        <ul class="pb-1 md:pb-2 grid grid-cols-5">
-          <li>Home</li>
+        <ul class="pb-1 md:pb-2 grid grid-cols-4">
+          <li><%= link("Home", to: "/") %></li>
           <li><%= link("Scatter Plot", to: "/scatter") %></li>
           <li><%= link("Bar Chart", to: "/bar") %></li>
-          <li>Layers</li>
-          <li>Other Goodies</li>
+          <li><%= link("Layers", to: "/layers") %></li>
         <ul>
       </nav>
     </header>

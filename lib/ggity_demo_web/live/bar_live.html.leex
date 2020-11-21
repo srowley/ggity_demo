@@ -76,7 +76,9 @@
           <%= radio_button(f, :fill, "tomato", checked: @fixed_aesthetics[:fill] == "tomato", class: "mr-1") %>
           <%= label(f, :fill_tomato, "tomato") %>
       </ul>
-      <label class="pl-2" for="alpha">Alpha Level</label>
+      <label class="pl-2" for="alpha">
+        Alpha Level (<output for="alpha"><%= @fixed_aesthetics[:alpha] %></output>)
+      </label>
       <%= range_input(f, :alpha, value: @fixed_aesthetics[:alpha], min: 0, max: 1, step: 0.05, class: "border") %>
     </form>
   </section>
@@ -119,7 +121,9 @@
       <div>
         <%= checkbox(f, :axis_ticks_length, checked_value: 2, unchecked_value: 0, value: @theme[:axis_ticks_length]) %>
       </div>
-      <label class="pl-2" for="angle">X-Axis Tick Lable Angle</label>
+      <label class="pl-2" for="angle">
+        X-Axis Tick Label Angle (<output for="label_font_size"><%= @theme[:axis_text_x][:angle] %></output>)
+      </label>
       <%= range_input(f, :angle, value: @theme[:axis_text_x][:angle], min: 0, max: 90, step: 5, class: "border") %>
     </form>
   </section>

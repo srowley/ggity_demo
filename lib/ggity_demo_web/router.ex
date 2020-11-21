@@ -17,13 +17,9 @@ defmodule GGityDemoWeb.Router do
   scope "/", GGityDemoWeb do
     pipe_through :browser
 
-    live "/", ScatterLive
+    get "/", HomeController, :index
     live "/scatter", ScatterLive
     live "/bar", BarLive
+    live "/layers", LayersLive
   end
-
-  # Other scopes may use custom stacks.
-  # scope "/api", GGityDemoWeb do
-  #   pipe_through :api
-  # end
 end

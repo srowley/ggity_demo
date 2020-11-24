@@ -1,4 +1,4 @@
-<h2 class="m-auto p-4 md:py-4 text-lg md:text-4xl">
+<h2 class="m-auto p-4 md:py-4 text-lg md:text-3xl">
   GGity brings the familiar interface of R's ggplot2 library to SVG charting in Elixir.
 </h2>
 

@@ -1,7 +1,7 @@
 <div x-data="{
   openTab: 1,
   activeClasses: 'border-l border-t border-r border-indigo-800 bg-gray-100 rounded-t',
-  inactiveClasses: 'text-indigo-500 hover:text-indigo-800',
+  inactiveClasses: 'bg-gray-200 text-indigo-500 hover:text-indigo-800',
   about_data_show: true,
   about_layers_show: true
   }"
@@ -9,13 +9,13 @@
   <div class="w-full ml-4 mt-6">
     <ul class="-mr-4 w-full flex justify-between border-b border-indigo-800 text-indigo-800 text-sm md:text-base">
       <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }">
-        <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Data/Mapping</a>
+        <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="inline-block py-2 px-4 font-semibold" href="#">Data/Mapping</a>
       </li>
       <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }">
-        <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Fixed Aesthetics</a>
+        <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="inline-block py-2 px-4 font-semibold" href="#">Fixed Aesthetics</a>
       </li>
       <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }">
-        <a :class="openTab === 3 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Theme</a>
+        <a :class="openTab === 3 ? activeClasses : inactiveClasses" class="inline-block py-2 px-4 font-semibold" href="#">Theme</a>
       </li>
     </ul>
   </div>
@@ -116,7 +116,7 @@
         <%= checkbox(f, :axis_ticks_length, checked_value: 2, unchecked_value: 0, value: @theme[:axis_ticks_length]) %>
       </div>
       <label class="pl-2" for="angle">
-        X-Axis Tick Label Angle (<output for="label_font_size"><%= @theme[:axis_text_x][:angle] %></output>)
+        Axis Tick Label Angle (<output for="label_font_size"><%= @theme[:axis_text_x][:angle] %></output>)
       </label>
       <%= range_input(f, :angle, value: @theme[:axis_text_x][:angle], min: 0, max: 90, step: 5, class: "border") %>
     </form>
@@ -170,11 +170,11 @@
 </div>
 
 <div id="output" class="mt-2 ml-4 mr-4 md:mt-6" style="width:550px">
-  <section id="chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border border-gray-500">
+  <section id="chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border bg-white border-gray-500">
     <%= {:safe, draw_chart(@mapping, @metrics, @fixed_aesthetics, @theme)} %>
   </section>
 
-  <section id="code" style="background-color:#2f1e2e" class="w-full p-5 border text-xs">
+  <section id="code" style="background-color:#2f1e2e" class="hidden md:block w-full p-5 border text-xs">
     <style><%= {:safe, Makeup.stylesheet(Makeup.Styles.HTML.StyleMap.paraiso_dark_style())} %></style>
     <%= {:safe, generated_code(@mapping, @metrics, @fixed_aesthetics, @theme)} %>
   </section>

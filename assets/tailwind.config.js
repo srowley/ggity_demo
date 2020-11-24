@@ -11,7 +11,11 @@ module.exports = {
     "./js/**/*.js"
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'body': ['Cabin'],
+      }
+    }
   },
   variants: {},
   plugins: [],

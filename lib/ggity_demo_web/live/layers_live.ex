@@ -197,18 +197,26 @@ defmodule GGityDemoWeb.LayersLive do
     base_data
     |> Plot.new()
     |> Plot.geom_line(#{inspect(mapping)}#{code_for_line_size(fixed_aesthetics)})
-    |> Plot.geom_point(%{x: "date", y: "value01"}, data: min_record#{code_for_point_size(fixed_aesthetics)})
-    |> Plot.geom_text(%{x: "date", y: "value01", label: "value01_label"},
+    |> Plot.geom_point(
+      %{x: "date", y: "value01"},
+      data: min_record#{code_for_point_size(fixed_aesthetics)}
+      )
+    |> Plot.geom_text(
+      %{x: "date", y: "value01", label: "value01_label"},
       data: min_record,
       nudge_y: 10,
       size: #{fixed_aesthetics.label_font_size}
-    )
-    |> Plot.geom_point(%{x: "date", y: "value01"}, data: max_record#{code_for_point_size(fixed_aesthetics)})
-    |> Plot.geom_text(%{x: "date", y: "value01", label: "value01_label"},
+      )
+    |> Plot.geom_point(
+      %{x: "date", y: "value01"},
+      data: max_record#{code_for_point_size(fixed_aesthetics)}
+      )
+    |> Plot.geom_text(
+      %{x: "date", y: "value01", label: "value01_label"},
       data: max_record,
       nudge_y: 10,
       size: #{fixed_aesthetics.label_font_size}
-    )
+      )
     #{code_for_color_scale(mapping)}
     #{code_for_labels(mapping)}
     #{code_for_theme(theme)}

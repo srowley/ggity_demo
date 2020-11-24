@@ -1,20 +1,20 @@
 <div x-data="{
   openTab: 1,
   activeClasses: 'border-l border-t border-r border-indigo-800 bg-gray-100 rounded-t',
-  inactiveClasses: 'text-indigo-500 hover:text-indigo-800',
+  inactiveClasses: 'bg-gray-200 text-indigo-500 hover:text-indigo-800',
   about_data_show: true
   }"
   id="inputs" style="width:400px" class="-ml-2 mr-6">
   <div class="w-full ml-4 mt-6">
     <ul class="-mr-4 w-full flex justify-between border-b border-indigo-800 text-indigo-800 text-sm md:text-base">
       <li @click="openTab = 1" :class="{ '-mb-px': openTab === 1 }">
-        <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Mapping</a>
+        <a :class="openTab === 1 ? activeClasses : inactiveClasses" class="inline-block py-2 px-4 font-semibold" href="#">Mapping</a>
       </li>
       <li @click="openTab = 2" :class="{ '-mb-px': openTab === 2 }">
-        <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Fixed Aesthetics</a>
+        <a :class="openTab === 2 ? activeClasses : inactiveClasses" class="inline-block py-2 px-4 font-semibold" href="#">Fixed Aesthetics</a>
       </li>
       <li @click="openTab = 3" :class="{ '-mb-px': openTab === 3 }">
-        <a :class="openTab === 3 ? activeClasses : inactiveClasses" class="bg-white inline-block py-2 px-4 font-semibold" href="#">Theme</a>
+        <a :class="openTab === 3 ? activeClasses : inactiveClasses" class="inline-block py-2 px-4 font-semibold" href="#">Theme</a>
       </li>
     </ul>
   </div>
@@ -122,7 +122,7 @@
         <%= checkbox(f, :axis_ticks_length, checked_value: 2, unchecked_value: 0, value: @theme[:axis_ticks_length]) %>
       </div>
       <label class="pl-2" for="angle">
-        X-Axis Tick Label Angle (<output for="label_font_size"><%= @theme[:axis_text_x][:angle] %></output>)
+        Tick Label Angle (<output for="label_font_size"><%= @theme[:axis_text_x][:angle] %></output>)
       </label>
       <%= range_input(f, :angle, value: @theme[:axis_text_x][:angle], min: 0, max: 90, step: 5, class: "border") %>
     </form>
@@ -135,11 +135,11 @@
       <a x-show="!about_data_show" @click="about_data_show = !about_data_show"  class="text-sm hover:underline" href="#">[show]</a>
     </div>
     <div x-show="about_data_show">
-      <p>The mpg dataset is one of the canonical datasets included with R's ggplot2 package (and with GGity),
-      describing city/highway mileage data for 235 makes and models of vehicles. The mileage data is not used here,
-      as bar charts are typically used to summarize counts of discrete variables. Unlike other geoms,
-      the bar geom does not directly map a variable value to the y-axis; instead by default the y-aesthetic
-      is mapped to the count of observations. GGity does support the "col" geom, which maps a continuous variable to y.
+      <p>The mpg dataset describes city/highway mileage data for 235 makes and models of vehicles.
+      The mileage data is not used here, as bar charts are typically used to summarize counts of discrete
+      variables. Unlike other geoms, the bar geom does not directly map a variable value to the y-axis;
+      instead by default the y-aesthetic is mapped to the count of observations. GGity also supports the
+      "col" geom, which maps a continuous variable to y.
       </p>
       <br/>
       <p>Variables available here include:
@@ -162,7 +162,7 @@
 </div>
 
 <div id="output" class="mt-2 ml-4 mr-4 md:mt-6" style="width:550px">
-  <section id="chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border border-gray-500">
+  <section id="chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border bg-white border-gray-500">
     <%= {:safe, draw_chart(@mapping, @fixed_aesthetics, @scales, @theme)} %>
   </section>
 

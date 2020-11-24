@@ -5,15 +5,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link href="https://fonts.googleapis.com/css2?family=Oswald&family=Roboto+Slab&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
     <%= csrf_meta_tag() %>
-    <%= live_title_tag assigns[:page_title] || "GGityDemo" %>
+    <%= live_title_tag assigns[:page_title] || "GGity By Example" %>
     <link phx-track-static rel="stylesheet" href="<%= Routes.static_path(@conn, "/css/app.css") %>"/>
     <script defer phx-track-static type="text/javascript" src="<%= Routes.static_path(@conn, "/js/app.js") %>"></script>
   </head>
-  <body class="m-0 w-full md:w-4/5 md:m-auto">
+  <body class="bg-gray-200 m-0 w-full md:w-4/5 md:m-auto" style="font-family: 'Cabin'">
     <header class="m-auto w-full bg-indigo-900 text-2xl md:text-5xl text-center text-white font-bold">
       <h1 class="m-auto">GGity By Example</h1>
-      <nav class="font-normal text-sm md:text-base">
+      <nav class="pt-2 font-normal text-sm md:text-base md:pt-4">
         <ul class="pb-1 md:pb-2 grid grid-cols-4">
           <li><%= link("Home", to: "/") %></li>
           <li><%= link("Scatter Plot", to: "/scatter") %></li>

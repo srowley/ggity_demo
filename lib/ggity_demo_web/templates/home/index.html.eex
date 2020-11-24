@@ -1,1 +1,41 @@
-<p>This is the home page.</p>
+<h2 class="m-auto p-4 md:py-4 text-lg md:text-4xl">
+  GGity brings the familiar interface of R's ggplot2 library to SVG charting in Elixir.
+</h2>
+
+<div class="max-w-5xl m-auto px-4 md:p-0">
+  <div class="m-auto grid grid-rows-2 grid-cols-2 gap-4">
+    <div class="px-2 pt-4 bg-white rounded shadow">
+      <%= {:safe, tx_housing_chart()} %>
+    </div>
+    <div class="px-2 pt-4 bg-white rounded shadow">
+      <%= {:safe, stacked_bar()} %>
+    </div>
+    <div class="px-2 pt-4 bg-white rounded shadow">
+      <%= {:safe, line_and_points()} %>
+    </div>
+    <div class="px-2 pt-4 bg-white rounded shadow">
+      <%= {:safe, area()} %>
+    </div>
+  </div>
+
+  <div class="m-auto flex flex-row flex-wrap justify-around">
+    <div class="p-4 w-1/2">
+      <h3 class="text-xl font-semibold">Examples</h3>
+        <ul class="py-2 list-disc pl-4 md:pl-8 text-sm md:text-base">
+          <li><%= link("Scatter plot", to: "/scatter", class: "font-semibold text-teal-600 hover:underline") %> of vehicle performance data</li>
+          <li><%= link("Bar chart", to: "/bar", class: "font-semibold text-teal-600 hover:underline") %> of vehicle features by manufacturer</li>
+          <li><%= link("Time series plot", to: "/layers", class: "font-semibold text-teal-600 hover:underline") %> of economic data with custom labels</li>
+      </ul>
+    </div>
+
+    <div class="p-4 w-1/2">
+      <h3 class="text-base md:text-xl font-semibold">Resources</h3>
+      <ul class="pt-2 list-disc pl-4 md:pl-8 text-sm md:text-base">
+        <li><a class="font-semibold text-teal-600 hover:underline" href="https://github.com/srowley/ggity">GGity source code</a></li>
+        <li>Documentation</li>
+        <li>Demonstration source code</li>
+        <li><a class="font-semibold text-teal-600 hover:underline" href="https://github.com/srowley/ggity/blob/master/ROADMAP.md">Roadmap</a></li>
+      </ul>
+    </div>
+  </div>
+</div>

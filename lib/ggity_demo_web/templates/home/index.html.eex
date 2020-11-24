@@ -33,7 +33,7 @@
       <ul class="pt-2 list-disc pl-4 md:pl-8 text-sm md:text-base">
         <li><a class="font-semibold text-teal-600 hover:underline" href="https://github.com/srowley/ggity">GGity source code</a></li>
         <li>Documentation</li>
-        <li><a class="font-semibold text-teal-600 hover:underline" href="https://github.com/srowley/ggity_demo">Deomonstration source code</a></li>
+        <li><a class="font-semibold text-teal-600 hover:underline" href="https://github.com/srowley/ggity_demo">Demonstration source code</a></li>
         <li><a class="font-semibold text-teal-600 hover:underline" href="https://github.com/srowley/ggity/blob/master/ROADMAP.md">Roadmap</a></li>
       </ul>
     </div>

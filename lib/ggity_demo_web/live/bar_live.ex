@@ -30,6 +30,7 @@ defmodule GGityDemoWeb.BarLive do
      assign(
        socket,
        mapping: %{x: "manufacturer", fill: "class"},
+       pos_adjustment: :stack,
        scales: [fill_scale_option: :viridis],
        fixed_aesthetics: [alpha: 1],
        theme: @default_theme
@@ -46,6 +47,11 @@ defmodule GGityDemoWeb.BarLive do
 
     fill_scale_option = String.to_atom(params["fill_scale_option"] || "viridis")
     {:noreply, assign(socket, mapping: mapping, scales: [fill_scale_option: fill_scale_option])}
+  end
+
+  @impl true
+  def handle_event("update_position", %{"position" => params}, socket) do
+    {:noreply, assign(socket, pos_adjustment: String.to_atom(params["position_adjustment"]))}
   end
 
   @impl true
@@ -108,7 +114,7 @@ defmodule GGityDemoWeb.BarLive do
     ]
   end
 
-  defp draw_chart(mapping, fixed_aesthetics, scales, theme) do
+  defp draw_chart(mapping, pos_adjustment, fixed_aesthetics, scales, theme) do
     @mpg_data
     |> Enum.filter(fn record ->
       record["manufacturer"] in [
@@ -122,7 +128,7 @@ defmodule GGityDemoWeb.BarLive do
       ]
     end)
     |> Plot.new()
-    |> Plot.geom_bar(mapping, fixed_aesthetics)
+    |> Plot.geom_bar(mapping, [{:position, pos_adjustment} | fixed_aesthetics])
     |> Plot.scale_y_continuous(labels: &floor/1)
     |> Plot.scale_fill_viridis(option: scales[:fill_scale_option])
     |> Plot.labs([

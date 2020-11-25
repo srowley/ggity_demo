@@ -20,6 +20,15 @@
   </div>
 
   <section x-show="openTab === 1" id="mapping_tab" class="w-full text-sm mb-4 ml-4 mr-4 border-r border-l border-b border-indigo-800">
+    <%= f = form_for :position, "#", [phx_change: "update_position", class: "p-2 bg-gray-100 grid grid-rows-1 grid-cols-2 gap-x-2 gap-y-2"] %>
+      <label class="pl-2" for="position_adjustment">Position Adjustment</label>
+      <div>
+        <%= radio_button(f, :position_adjustment, "stack", checked: @pos_adjustment == :stack, class: "mr-1") %>
+        <%= label(f, :position_adjustment_stack, "stack", class: "mr-3") %>
+        <%= radio_button(f, :position_adjustment, "dodge", checked: @pos_adjustment == :dodge, class: "mr-1") %>
+        <%= label(f, :position_adjustment_dodge, "dodge") %>
+      </div>
+    </form>
     <%= f = form_for :mapping, "#", [phx_change: "update_mapping", class: "p-2 bg-gray-100 grid grid-rows-2 grid-cols-2 gap-x-2 gap-y-2"] %>
       <p class="font-bold text-center">Aesthetic</p>
       <p class="font-bold text-center">Variable</p>
@@ -163,7 +172,7 @@
 
 <div id="output" class="mt-2 ml-4 mr-4 md:mt-6" style="width:550px">
   <section id="chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border bg-white border-gray-500">
-    <%= {:safe, draw_chart(@mapping, @fixed_aesthetics, @scales, @theme)} %>
+    <%= {:safe, draw_chart(@mapping, @pos_adjustment, @fixed_aesthetics, @scales, @theme)} %>
   </section>
 
   <section id="code" style="background-color:#2f1e2e" class="w-full p-5 border text-xs">

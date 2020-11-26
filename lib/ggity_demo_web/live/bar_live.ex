@@ -147,7 +147,7 @@ defmodule GGityDemoWeb.BarLive do
     |> Plot.plot()
   end
 
-  defp generated_code(mapping, fixed_aesthetics, scales, theme) do
+  defp generated_code(mapping, pos_adjustment, fixed_aesthetics, scales, theme) do
     ~s"""
     alias GGity.{Examples, Plot}
     import GGity.Element.{Line, Rect, Text}
@@ -165,7 +165,7 @@ defmodule GGityDemoWeb.BarLive do
         ]
     end)
     |> Plot.new(#{code_for_x(mapping)})
-    |> Plot.geom_bar(#{code_for_geom(mapping, fixed_aesthetics)})
+    |> Plot.geom_bar(#{code_for_geom(mapping, fixed_aesthetics, pos_adjustment)})
     |> Plot.scale_y_continuous(labels: &floor/1)
     #{code_for_fill_scale(scales, mapping)}
     #{code_for_labels(mapping)}
@@ -180,13 +180,24 @@ defmodule GGityDemoWeb.BarLive do
     "%{x: \"#{mapping.x}\"}"
   end
 
-  defp code_for_geom(mapping, fixed_aesthetics) when map_size(mapping) == 1 do
-    code_for_fixed_aes(fixed_aesthetics)
+  defp code_for_geom(mapping, fixed_aesthetics, pos_adjustment) when map_size(mapping) == 1 do
+    fixed_aesthetics
+    |> Keyword.put(:position, pos_adjustment)
+    |> code_for_fixed_aes()
   end
 
-  defp code_for_geom(mapping, alpha: 1) do
+  defp code_for_geom(mapping, [{:alpha, 1}], :stack) do
     code_for_mapped_aes(mapping)
   end
+
+  defp code_for_geom(mapping, fixed_aesthetics, :stack) do
+    code_for_geom(mapping, fixed_aesthetics)
+  end
+
+  defp code_for_geom(mapping, fixed_aesthetics, :dodge) do
+    code_for_geom(mapping, Keyword.put(fixed_aesthetics, :position, :dodge))
+  end
+
 
   defp code_for_geom(mapping, fixed_aesthetics) do
     actually_fixed_aesthetics =
@@ -222,11 +233,12 @@ defmodule GGityDemoWeb.BarLive do
   end
 
   defp code_for_fixed_aes([]), do: ""
-  defp code_for_fixed_aes(alpha: 1), do: ""
+  defp code_for_fixed_aes([alpha: 1, position: :stack]), do: ""
 
   defp code_for_fixed_aes(fixed_aesthetics) do
     fixed_aesthetics
     |> List.delete({:alpha, 1})
+    |> List.delete({:position, :stack})
     |> inspect()
     |> strip_list_brackets()
   end

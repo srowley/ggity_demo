@@ -177,6 +177,6 @@
 
   <section id="code" style="background-color:#2f1e2e" class="w-full p-5 border text-xs">
     <style><%= {:safe, Makeup.stylesheet(Makeup.Styles.HTML.StyleMap.paraiso_dark_style())} %></style>
-    <%= {:safe, generated_code(@mapping, @fixed_aesthetics, @scales, @theme)} %>
+    <%= {:safe, generated_code(@mapping, @pos_adjustment, @fixed_aesthetics, @scales, @theme)} %>
   </section>
 </div>

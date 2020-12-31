@@ -18,7 +18,8 @@ defmodule GGityDemoWeb.HomeView do
       title: "Scatter Plot",
       x: "Sales",
       y: "Median Price",
-      color: "City")
+      color: "City"
+    )
     |> Plot.plot()
   end
 
@@ -63,7 +64,7 @@ defmodule GGityDemoWeb.HomeView do
       x: "Manufacturer",
       y: "# of Models",
       fill: "Vehicle Class"
-      )
+    )
     |> Plot.plot()
   end
 
@@ -77,7 +78,7 @@ defmodule GGityDemoWeb.HomeView do
       x: "Weight (000s of lbs)",
       y: "Miles Per Gallon",
       color: "Cylinders"
-      )
+    )
     |> Plot.plot()
   end
 
@@ -94,7 +95,7 @@ defmodule GGityDemoWeb.HomeView do
       x: "Date",
       y: "Illustrative Value",
       fill: "Metric"
-      )
+    )
     |> Plot.theme(axis_text_x: element_text(angle: 30))
     |> Plot.plot()
   end

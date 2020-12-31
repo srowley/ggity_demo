@@ -199,15 +199,12 @@ defmodule GGityDemoWeb.BarLive do
     code_for_geom(mapping, Keyword.put(fixed_aesthetics, :position, :dodge))
   end
 
-
   defp code_for_geom(mapping, fixed_aesthetics) do
     actually_fixed_aesthetics =
-      fixed_aesthetics
-      |> Enum.reject(fn {key, _value} -> key in Map.keys(mapping) end)
-      |> Enum.reject(fn {key, value} -> {key, value} == {:alpha, 1} end)
-      |> Enum.map(fn
-        {key, value} -> {key, value}
-      end)
+      for {key, value} <- fixed_aesthetics,
+          key not in Map.keys(mapping),
+          {key, value} != {:alpha, 1},
+          do: {key, value}
 
     case actually_fixed_aesthetics do
       [] ->
@@ -234,7 +231,7 @@ defmodule GGityDemoWeb.BarLive do
   end
 
   defp code_for_fixed_aes([]), do: ""
-  defp code_for_fixed_aes([alpha: 1, position: :stack]), do: ""
+  defp code_for_fixed_aes(alpha: 1, position: :stack), do: ""
 
   defp code_for_fixed_aes(fixed_aesthetics) do
     fixed_aesthetics

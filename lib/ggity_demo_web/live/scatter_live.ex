@@ -53,7 +53,7 @@ defmodule GGityDemoWeb.ScatterLive do
   def handle_event("update_fixed", %{"fixed_aesthetics" => params}, socket) do
     fixed_aesthetics =
       for {key, value} <- params,
-      do: {String.to_existing_atom(key), cast(value)}
+          do: {String.to_existing_atom(key), cast(value)}
 
     {:noreply, assign(socket, fixed_aesthetics: fixed_aesthetics)}
   end
@@ -161,12 +161,11 @@ defmodule GGityDemoWeb.ScatterLive do
 
   defp code_for_geom(mapping, fixed_aesthetics) do
     actually_fixed_aesthetics =
-      fixed_aesthetics
-      |> Enum.reject(fn {key, _value} -> key in Map.keys(mapping) end)
-      |> Enum.reject(fn {key, value} -> {key, value} == {:alpha, 1} end)
-      |> Enum.map(fn
-        {key, value} -> {key, value}
-      end)
+      for {key, value} <- fixed_aesthetics,
+          key not in Map.keys(mapping),
+          {key, value} != {:alpha, 1},
+          {key, value} != {:size, 4},
+          do: {key, value}
 
     case actually_fixed_aesthetics do
       [] ->

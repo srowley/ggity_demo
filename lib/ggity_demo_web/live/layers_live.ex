@@ -34,7 +34,7 @@ defmodule GGityDemoWeb.LayersLive do
     metrics =
       for {key, value} <- params, value == "true", do: String.trim_leading(key, "metrics_")
 
-    aesthetic = String.to_atom(params["aesthetic"])
+    aesthetic = String.to_existing_atom(params["aesthetic"])
     mapping = Map.new([{:x, "date"}, {:y, "value01"}, {aesthetic, "variable"}])
 
     {:noreply, assign(socket, metrics: ["uempmed" | metrics], mapping: mapping)}
@@ -42,7 +42,7 @@ defmodule GGityDemoWeb.LayersLive do
 
   @impl true
   def handle_event("update_fixed", %{"fixed_aesthetics" => params}, socket) do
-    fixed_aesthetics = for {key, value} <- params, do: {String.to_atom(key), cast(value)}, into: %{}
+    fixed_aesthetics = for {key, value} <- params, do: {String.to_existing_atom(key), cast(value)}, into: %{}
     {:noreply, assign(socket, fixed_aesthetics: fixed_aesthetics)}
   end
 

@@ -21,6 +21,9 @@ defmodule GGityDemoWeb.ScatterLive do
     panel_grid_major: [size: 1]
   ]
 
+  # @mapping_params [:x, :y, :color, :color_scale_option, :shape]
+  # @fixed_aesthetic_params [:color, :alpha, :size]
+
   @impl true
   def mount(_params, _session, socket) do
     {:ok,
@@ -37,18 +40,20 @@ defmodule GGityDemoWeb.ScatterLive do
   def handle_event("update_mapping", %{"mapping" => params}, socket) do
     mapping =
       for {key, value} <- params,
-          key != "color_scale_option" && value != "none",
-          do: {String.to_atom(key), cast(value)},
+          key != "color_scale_option",
+          value != "none",
+          do: {String.to_existing_atom(key), cast(value)},
           into: %{}
 
-    color_scale_option = String.to_atom(params["color_scale_option"] || "viridis")
+    color_scale_option = String.to_existing_atom(params["color_scale_option"]) || :viridis
     {:noreply, assign(socket, mapping: mapping, scales: [color_scale_option: color_scale_option])}
   end
 
   @impl true
   def handle_event("update_fixed", %{"fixed_aesthetics" => params}, socket) do
     fixed_aesthetics =
-      for {key, value} <- params, value != "default", do: {String.to_atom(key), cast(value)}
+      for {key, value} <- params,
+      do: {String.to_existing_atom(key), cast(value)}
 
     {:noreply, assign(socket, fixed_aesthetics: fixed_aesthetics)}
   end

@@ -41,11 +41,12 @@ defmodule GGityDemoWeb.BarLive do
   def handle_event("update_mapping", %{"mapping" => params}, socket) do
     mapping =
       for {key, value} <- params,
-          key != "fill_scale_option" && value != "none",
-          do: {String.to_atom(key), cast(value)},
+          key != "fill_scale_option",
+          value != "none",
+          do: {String.to_existing_atom(key), cast(value)},
           into: %{}
 
-    fill_scale_option = String.to_atom(params["fill_scale_option"] || "viridis")
+    fill_scale_option = String.to_existing_atom(params["fill_scale_option"]) || :viridis
     {:noreply, assign(socket, mapping: mapping, scales: [fill_scale_option: fill_scale_option])}
   end
 

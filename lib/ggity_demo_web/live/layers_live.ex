@@ -209,7 +209,9 @@ defmodule GGityDemoWeb.LayersLive do
 
     base_data
     |> Plot.new()
-    |> Plot.scale_y_continuous(labels: fn value -> Float.round(value, 2) end)
+    |> Plot.scale_y_continuous(
+      labels: fn value -> Float.round(value, 2) end
+      )
     |> Plot.geom_line(#{inspect(mapping)}#{code_for_line_size(fixed_aesthetics)})
     |> Plot.geom_point(
       %{x: "date", y: "value01"},

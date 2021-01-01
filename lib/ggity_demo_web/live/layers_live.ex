@@ -42,7 +42,9 @@ defmodule GGityDemoWeb.LayersLive do
 
   @impl true
   def handle_event("update_fixed", %{"fixed_aesthetics" => params}, socket) do
-    fixed_aesthetics = for {key, value} <- params, do: {String.to_existing_atom(key), cast(value)}, into: %{}
+    fixed_aesthetics =
+      for {key, value} <- params, do: {String.to_existing_atom(key), cast(value)}, into: %{}
+
     {:noreply, assign(socket, fixed_aesthetics: fixed_aesthetics)}
   end
 
@@ -91,10 +93,10 @@ defmodule GGityDemoWeb.LayersLive do
 
   defp draw_chart(mapping, metrics, fixed_aesthetics, theme) do
     base_data =
-      Enum.filter(@econ_data, fn record ->
-        record["variable"] in metrics &&
-          Date.compare(record["date"], ~D[1968-12-31]) == :lt
-      end)
+      for record <- @econ_data,
+          record["variable"] in metrics,
+          Date.compare(record["date"], ~D[2008-12-31]) == :lt,
+          do: record
 
     uempmed_only = Enum.filter(base_data, fn record -> record["variable"] == "uempmed" end)
 
@@ -103,29 +105,39 @@ defmodule GGityDemoWeb.LayersLive do
       |> Enum.min_max_by(fn record -> record["value01"] end)
 
     min_record =
-      Enum.filter(uempmed_only, fn record -> record["value01"] == min_value01 end)
-      |> Enum.map(fn record ->
-        Map.put(record, "value01_label", "Minimum: #{Float.round(record["value01"], 3)}")
-      end)
+      for record <- uempmed_only,
+          record["value01"] == min_value01,
+          do:
+            Map.put(
+              record,
+              "value01_label",
+              "Minimum: #{Float.round(record["value01"], 3)}"
+            )
 
     max_record =
-      Enum.filter(uempmed_only, fn record -> record["value01"] == max_value01 end)
-      |> Enum.map(fn record ->
-        Map.put(record, "value01_label", "Maximum: #{Float.round(record["value01"], 3)}")
-      end)
+      for record <- uempmed_only,
+          record["value01"] == max_value01,
+          do: Map.put(record, "value01_label", "Maximum: #{Float.round(record["value01"], 3)}")
 
     base_data
     |> Plot.new()
+    |> Plot.scale_y_continuous(labels: fn value -> Float.round(value, 2) end)
     |> Plot.geom_line(mapping, size: fixed_aesthetics.line_size)
-    |> Plot.geom_point(Map.take(mapping, [:x, :y]), data: min_record, size: fixed_aesthetics.point_size)
-    |> Plot.geom_text(%{x: "date", y: "value01", label: "value01_label"},
+    |> Plot.geom_point(Map.take(mapping, [:x, :y]),
       data: min_record,
-      nudge_y: 10,
+      size: fixed_aesthetics.point_size
+    )
+    |> Plot.geom_text(%{x: "date", y: "value01", label: "value01_label"},
+      data: [hd(min_record)],
+      nudge_y: 5,
       size: fixed_aesthetics.label_font_size
     )
-    |> Plot.geom_point(Map.take(mapping, [:x, :y]), data: max_record, size: fixed_aesthetics.point_size)
-    |> Plot.geom_text(%{x: "date", y: "value01", label: "value01_label"},
+    |> Plot.geom_point(Map.take(mapping, [:x, :y]),
       data: max_record,
+      size: fixed_aesthetics.point_size
+    )
+    |> Plot.geom_text(%{x: "date", y: "value01", label: "value01_label"},
+      data: [hd(max_record)],
       nudge_y: -10,
       size: fixed_aesthetics.label_font_size
     )
@@ -157,10 +169,10 @@ defmodule GGityDemoWeb.LayersLive do
 
 
     base_data =
-      Enum.filter(Examples.economics_long(), fn record ->
-        record["variable"] in #{inspect(metrics)} &&
-          Date.compare(record["date"], ~D[1968-12-31]) == :lt
-      end)
+      for record <- Examples.economics_long(),
+        record["variable"] in #{inspect(metrics)},
+        Date.compare(record["date"], ~D[2008-12-31]) == :lt,
+        do: record
 
 
     uempmed_only = Enum.filter(base_data, fn record ->
@@ -168,34 +180,36 @@ defmodule GGityDemoWeb.LayersLive do
     end)
 
 
+    {%{"value01" => min_value01}, %{"value01" => max_value01}} =
+      uempmed_only
+      |> Enum.min_max_by(fn record -> record["value01"] end)
+
+
     min_record =
-      Enum.filter(uempmed_only, fn record ->
-        record["value01"] == min_value01
-      end)
-      |> Enum.map(fn record ->
-        Map.put(
-          record,
-          "value01_label",
-          "Minimum: \#{Float.round(record["value01"], 3)}"
-        )
-      end)
+      for record <- uempmed_only,
+        record["value01"] == min_value01,
+        do:
+          Map.put(
+            record,
+            "value01_label",
+            "Minimum: \#{Float.round(record["value01"], 3)}"
+          )
 
 
     max_record =
-      Enum.filter(uempmed_only, fn record ->
-        record["value01"] == max_value01
-      end)
-      |> Enum.map(fn record ->
-        Map.put(
-          record,
-          "value01_label",
-          "Maximum: \#{Float.round(record["value01"], 3)}"
-        )
-      end
+      for record <- uempmed_only,
+        record["value01"] == max_value01,
+        do:
+          Map.put(
+            record,
+            "value01_label",
+            "Maximum: \#{Float.round(record["value01"], 3)}"
+          )
 
 
     base_data
     |> Plot.new()
+    |> Plot.scale_y_continuous(labels: fn value -> Float.round(value, 2) end)
     |> Plot.geom_line(#{inspect(mapping)}#{code_for_line_size(fixed_aesthetics)})
     |> Plot.geom_point(
       %{x: "date", y: "value01"},
@@ -203,8 +217,8 @@ defmodule GGityDemoWeb.LayersLive do
       )
     |> Plot.geom_text(
       %{x: "date", y: "value01", label: "value01_label"},
-      data: min_record,
-      nudge_y: 10,
+      data: [hd(min_record)],
+      nudge_y: 5,
       size: #{fixed_aesthetics.label_font_size}
       )
     |> Plot.geom_point(
@@ -213,7 +227,7 @@ defmodule GGityDemoWeb.LayersLive do
       )
     |> Plot.geom_text(
       %{x: "date", y: "value01", label: "value01_label"},
-      data: max_record,
+      data: [hd(max_record)],
       nudge_y: 10,
       size: #{fixed_aesthetics.label_font_size}
       )
@@ -227,11 +241,13 @@ defmodule GGityDemoWeb.LayersLive do
   end
 
   defp code_for_line_size(%{line_size: 1}), do: ""
+
   defp code_for_line_size(fixed_aesthetics) do
     ", size: #{fixed_aesthetics.line_size}"
   end
 
   defp code_for_point_size(%{point_size: 4}), do: ""
+
   defp code_for_point_size(fixed_aesthetics) do
     ", size: #{fixed_aesthetics.point_size}"
   end
@@ -239,6 +255,7 @@ defmodule GGityDemoWeb.LayersLive do
   defp code_for_color_scale(%{color: _variable}) do
     "|> Plot.scale_color_viridis(option: :plasma)"
   end
+
   defp code_for_color_scale(_mapping), do: ""
 
   defp code_for_labels(mapping) do
@@ -260,20 +277,6 @@ defmodule GGityDemoWeb.LayersLive do
   defp strip_list_brackets(not_a_list), do: not_a_list
 
   def pretty_label(variable), do: variable
-
-  # defp pretty_label_list(mapping) do
-  #   Enum.map(mapping, fn {aesthetic, variable} ->
-  #     {aesthetic, pretty_label(variable)}
-  #   end)
-  # end
-
-  # defp pretty_labels(mapping) do
-  #   mapping
-  #   |> Enum.reverse()
-  #   |> Enum.map_join(",\n  ", fn {key, value} ->
-  #     "#{Atom.to_string(key)}: \"#{pretty_label(value)}\""
-  #   end)
-  # end
 
   defp code_for_theme(theme) do
     custom_theme_elements =

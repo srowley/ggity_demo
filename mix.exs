@@ -43,7 +43,6 @@ defmodule GGityDemo.MixProject do
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
       {:ggity, "~> 0.3.0"},
-      {:nimble_csv, "~> 0.7"},
       {:makeup_elixir, "~> 0.15"}
     ]
   end

@@ -52,13 +52,13 @@ defmodule GGityDemoWeb.BarLive do
 
   @impl true
   def handle_event("update_position", %{"position" => params}, socket) do
-    {:noreply, assign(socket, pos_adjustment: String.to_atom(params["position_adjustment"]))}
+    {:noreply, assign(socket, pos_adjustment: String.to_existing_atom(params["position_adjustment"]))}
   end
 
   @impl true
   def handle_event("update_fixed", %{"fixed_aesthetics" => params}, socket) do
     fixed_aesthetics =
-      for {key, value} <- params, value != "default", do: {String.to_atom(key), cast(value)}
+      for {key, value} <- params, value != "default", do: {String.to_existing_atom(key), cast(value)}
 
     {:noreply, assign(socket, fixed_aesthetics: fixed_aesthetics)}
   end

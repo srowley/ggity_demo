@@ -21,5 +21,6 @@ defmodule GGityDemoWeb.Router do
     live "/scatter", ScatterLive
     live "/bar", BarLive
     live "/layers", LayersLive
+    live "/live_view", DrillDownLive
   end
 end

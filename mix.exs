@@ -42,7 +42,7 @@ defmodule GGityDemo.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:ggity, "~> 0.3.0"},
+      {:ggity, "~> 0.4.0"},
       {:makeup_elixir, "~> 0.15"}
     ]
   end

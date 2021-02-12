@@ -1,29 +1,34 @@
-<div class="flex flex-row-reverse">
-<aside id="inputs" style="width:400px" class="mt-2 md:mt-6 ml-4 mr-6">
-  <h2 class="p-2 rounded bg-indigo-800 text-white text-base md:text-lg font-semibold">Using Custom Attributes</h2>
-  <p class="mt-2 ml-4">
-    This example illustrates how custom attributes can be used to add interactivity directly to a GGity graphic,
-    via LiveView, CSS classes, or JavaScript.
-  </p>
-  <p class="mt-2 ml-4">
-    For a detailed explanation of custom attributes, see the documentation.
-  </p>
-  <p class="mt-2 ml-4">
-  <ul class="ml-6 p-4 list-disc">
-    <li class="mb-4">
-      Event handlers - each <%= code("&ltrect&gt") %> element on the bar chart includes a <%= code("phx-click") %> handler
-      and a <%= code("phx-value") %> attribute with the value of the manufacturer for that bar. When the user clicks
-      on a bar, the event handler generates a plot for that manufacturer and updates the live view's assigns.
-    </li>
-    <li class="mb-4">
-      CSS styles - <%= code("class='cursor-pointer'") %> (a Tailwind utility class) is added to each <%= code("&ltrect&gt") %> to indicate
-      clickability. Tailwind classes are a perfect fit for custom attributes, but a custom attribute could just
-      as easily add classes defined in an external stylesheet, or be used to generate inline styles.
-    </li>
-    <li class="mb-4">
-      Alpine.js directives - [example coming soon - plain Javascript works fine also]
-    </li>
-  </ul>
+<aside x-data="{about_show: true}" id="inputs" class="mt-2 md:mt-6 ml-4 mr-6" style="width:400px">
+  <div class="flex justify-between items-center rounded bg-indigo-800 text-white text-bold p-2">
+    <h2 class="rounded bg-indigo-800 text-white text-base md:text-lg font-semibold">Using Custom Attributes</h2>
+    <a x-show="about_show" @click="about_show = !about_show" class="text-sm hover:underline" href="#">[hide]</a>
+    <a x-show="!about_show" @click="about_show = !about_show"  class="text-sm hover:underline" href="#">[show]</a>
+  </div>
+  <div x-show="about_show">
+    <p class="mt-2 ml-4">
+      This example illustrates how custom attributes can be used to add interactivity directly to a GGity graphic,
+      via LiveView, CSS classes, or JavaScript.
+    </p>
+    <p class="mt-2 ml-4">
+      For a detailed explanation of custom attributes, see the documentation.
+    </p>
+    <p class="mt-2 ml-4">
+    <ul class="ml-6 p-4 list-disc">
+      <li class="mb-4">
+        Event handlers - each <%= code("&ltrect&gt") %> element on the bar chart includes a <%= code("phx-click") %> handler
+        and a <%= code("phx-value") %> attribute with the value of the manufacturer for that bar. When the user clicks
+        on a bar, the event handler generates a plot for that manufacturer and updates the live view's assigns.
+      </li>
+      <li class="mb-4">
+        CSS styles - <%= code("class='cursor-pointer'") %> (a Tailwind utility class) is added to each <%= code("&ltrect&gt") %> to indicate
+        clickability. Tailwind classes are a perfect fit for custom attributes, but a custom attribute could just
+        as easily add classes defined in an external stylesheet, or be used to generate inline styles.
+      </li>
+      <li class="mb-4">
+        Alpine.js directives - [example coming soon - plain Javascript works fine also]
+      </li>
+    </ul>
+  </div>
 </aside>
 <div id="output" class="mt-2 ml-4 mr-4 md:mt-6" style="width:550px">
   <section id="base_chart" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border bg-white border-gray-500">
@@ -32,5 +37,4 @@
   <section id="drill_down" class="w-full shadow-lg pt-4 pr-4 pl-4 mb-4 rounded border bg-white border-gray-500">
     <%= {:safe, @drill_down} %>
   </section>
-</div>
 </div>
